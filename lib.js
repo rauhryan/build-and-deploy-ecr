@@ -29,6 +29,7 @@ function getInputs() {
   const githubSSHKey = core.getInput("github_ssh_key");
   const githubPackagesToken = core.getInput("github_packages_token");
   const healthcheck = core.getInput("healthcheck");
+  const healthcheckDelay = parseInt(core.getInput("healthcheck_delay"));
   const platform = core.getInput("platform");
   const port = core.getInput("port");
   const registries = core.getInput("registries");
@@ -46,6 +47,7 @@ function getInputs() {
     githubSSHKey,
     githubPackagesToken,
     healthcheck,
+    healthcheckDelay,
     platform,
     port,
     registries,
@@ -151,6 +153,12 @@ async function runHealthcheck(imageName, inputs) {
   console.log(dockerRunStdout);
 
   core.startGroup("Healthchecks");
+  if (inputs.healthcheckDelay) {
+      console.log(
+        `Waiting ${inputs.healthcheckDelay} before starting healthchecks`
+      );
+      await util.sleep(inputs.healthcheckDelay);
+  }
   let attemptCount = 0;
   const maxAttempts = 5;
   const healthcheckURL = `http://localhost:${inputs.port}${inputs.healthcheck}`;

@@ -43,6 +43,10 @@ inputs:
     description: healthcheck path, like /healthcheck
     required: false
     default: /healthcheck
+  healthcheck_delay:
+    description: time in milliseconds to wait until the first healthcheck
+    required: false
+    default: ""
   platform:
     default: ""
     description: Image platform
